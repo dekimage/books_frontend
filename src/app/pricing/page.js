@@ -8,7 +8,7 @@ const freeData = {
   description: " Start creating your own book summaries",
   price: "$0",
   features: [
-    "Create unlimited Ideas, Tasks, Routines, Questions",
+    "Create unlimited Reflections",
     "Follow Categories for personalized suggestions",
     "Save content from the community to your library",
   ],
@@ -20,7 +20,7 @@ const proData = {
   description: "Upgrade to unlock all features",
   price: "$9",
   features: [
-    "Create Private Ideas, Tasks, Routines, Questions",
+    "Create Private Reflections",
     "Create Collections from multiple books to create custom learning paths",
     "Support us <3",
   ],

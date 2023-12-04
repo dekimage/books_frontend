@@ -9,12 +9,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      hello
-      {user && <div>{user.username}</div>}
-      {loading && <div>Loading....</div>}
-      <div>
-        <ModeToggle />
-      </div>
+      <div>{/* {ideas} */}</div>
     </main>
   );
 }

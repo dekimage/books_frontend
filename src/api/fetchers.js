@@ -26,8 +26,8 @@ export const useGetAllMyIdeas = () => {
   return useGetRequest(`idea/getAllMyIdeas`);
 };
 
-export const useGetAllFavoriteIdeas = () => {
-  return useGetRequest(`idea/getAllFavoriteIdeas`);
+export const useGetAllSavedIdeas = () => {
+  return useGetRequest(`idea/getAllSavedIdeas`);
 };
 
 export const useGetCategory = (id) => {

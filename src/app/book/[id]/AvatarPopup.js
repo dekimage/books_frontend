@@ -15,8 +15,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 export function AvatarPopup({ user }) {
   return (
     <HoverCard>
-      <HoverCardTrigger asChild className="p-0">
-        <Button variant="link">@{user.username}</Button>
+      <HoverCardTrigger asChild className="p-0 capitalize">
+        <Button variant="link">{user.username}</Button>
       </HoverCardTrigger>
       <HoverCardContent className="w-80">
         <div className="flex justify-between space-x-4">

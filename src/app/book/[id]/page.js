@@ -1,5 +1,5 @@
 "use client";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEffect, useState } from "react";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
@@ -8,13 +8,15 @@ import { normalize } from "@/app/utils/functions";
 import { Button } from "@/components/ui/button";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa6";
 import { IoIosArrowBack } from "react-icons/io";
-import { useGetBookDetails } from "@/api/fetchers";
+import { useGetBookDetails, useGetMyBookIdeas } from "@/api/fetchers";
 import { useAuth } from "@/context/auth";
 import { bookApi } from "@/api/book";
 import { useRouter } from "next/navigation";
 import { baseUrl } from "@/app/utils/url";
 import { IdeaBuilder } from "@/components/builders/IdeaBuilder";
 import IdeasTabContent from "./IdeasTabContent";
+import { Badge } from "@/components/ui/badge";
+import { Idea } from "./Idea";
 
 export default function BookView({ params: { id: bookId } }) {
   const router = useRouter();
@@ -29,6 +31,12 @@ export default function BookView({ params: { id: bookId } }) {
     loading,
     error,
   } = useGetBookDetails(bookId);
+
+  const {
+    data: myIdea,
+    loading: myIdeasLoading,
+    error: myIdeasError,
+  } = useGetMyBookIdeas(bookId);
 
   useEffect(() => {
     if (data && user?.saved_books) {
@@ -47,9 +55,7 @@ export default function BookView({ params: { id: bookId } }) {
     image,
     category,
     ideas,
-    tasks,
-    routines,
-    questions,
+
     isSaved,
   } = book || {};
 
@@ -79,7 +85,7 @@ export default function BookView({ params: { id: bookId } }) {
   return (
     <div className="flex">
       {book && (
-        <div className="flex items-start justify-start w-full flex-col m-4">
+        <div className="flex flex-col pt-6 l:pt-16 relative  flex w-full max-w-[64rem] mx-auto m:px-12 px-4  ">
           <div className="w-full flex justify-between">
             <Button variant="outline" onClick={() => router.back()}>
               <IoIosArrowBack />
@@ -90,13 +96,13 @@ export default function BookView({ params: { id: bookId } }) {
             </Button>
           </div>
           <Image
-            className="border rounded mt-4 ml-4"
+            className="border rounded mt-4"
             src={`${baseUrl}${image.url}`}
             alt={title}
             height={200}
             width={200}
           />
-          <div className="flex flex-col p-4">
+          <div className="flex flex-col py-4">
             <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
               {title}
             </h1>
@@ -104,99 +110,32 @@ export default function BookView({ params: { id: bookId } }) {
             <p className="mt-2 text-m text-muted-foreground">{description}</p>
           </div>
 
-          <Tabs defaultValue="ideas" className="w-full">
-            <TabsList className="w-full my-6">
-              <TabsTrigger
-                className="w-full"
-                value="ideas"
-                onClick={() => setActiveTab("Ideas")}
-              >
-                Ideas ({ideas.length})
-              </TabsTrigger>
-              <TabsTrigger
-                className="w-full"
-                value="tasks"
-                onClick={() => setActiveTab("Tasks")}
-              >
-                Tasks ({tasks.length})
-              </TabsTrigger>
-              <TabsTrigger
-                className="w-full"
-                value="routines"
-                onClick={() => setActiveTab("Routines")}
-              >
-                Routines ({routines.length})
-              </TabsTrigger>
-              <TabsTrigger
-                className="w-full"
-                value="questions"
-                onClick={() => setActiveTab("Questions")}
-              >
-                Questions ({questions.length})
-              </TabsTrigger>
-            </TabsList>
+          <h1 className="scroll-m-20 text-2xl font-extrabold tracking-tight lg:text-3xl mt-12">
+            Your Reflection
+          </h1>
 
-            <div className="flex justify-between m-4">
-              <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                {myTab} {activeTab}
-              </h1>
-              <IdeaBuilder id={bookId} />
-            </div>
+          <div className="my-4">
+            {myIdea ? (
+              <div>
+                <Idea idea={{ ...myIdea }} isMy />
+              </div>
+            ) : (
+              <div>You dont have a reflection yet.</div>
+            )}
+          </div>
 
-            <IdeasTabContent
-              bookId={bookId}
-              ideas={ideas}
-              myTab={myTab}
-              setMyTab={setMyTab}
-            />
+          <IdeaBuilder book={book} idea={myIdea} />
 
-            {/* <TabsContent value="tasks">
-              {tasks.map((task, i) => (
-                <div key={i} className="flex flex-col p-4 m-4 border rounded">
-                  <p className="scroll-m-20 text-2xl font-semibold tracking-tight">
-                    {task.content}
-                  </p>
-                  <p className="mt-2 text-xl">
-                    {task.subtasks.map((subtask, i) => (
-                      <p key={i} className="text-sm">
-                        {i + 1}. {subtask.content}
-                      </p>
-                    ))}
-                  </p>
-                </div>
-              ))}
-            </TabsContent>
-            <TabsContent value="routines">
-              {routines.map((routine, i) => {
-                const formattedContent = formatRoutineContent(routine.content);
-                return (
-                  <div key={i} className="flex flex-col p-4 m-4 border rounded">
-                    <div className="flex justify-between">
-                      <p className="scroll-m-20 text-2xl font-semibold tracking-tight">
-                        {routine.name}
-                      </p>
-                      <Badge variant="outline">{routine.duration} min</Badge>
-                    </div>
+          <h1 className="scroll-m-20 text-2xl font-extrabold tracking-tight lg:text-3xl mt-12">
+            Community Reflections
+          </h1>
 
-                    <div className="mt-2">{formattedContent}</div>
-                  </div>
-                );
-              })}
-            </TabsContent>
-            <TabsContent value="questions">
-              {questions.map((question, i) => {
-                return (
-                  <div key={i} className="flex flex-col p-4 m-4 border rounded">
-                    <p className="scroll-m-20 text-2xl font-semibold tracking-tight">
-                      {question.content}
-                    </p>
-
-                    <div className="mt-2 text-sm">{question.prompt}</div>
-                  </div>
-                );
-              })}
-            </TabsContent> */}
-          </Tabs>
+          <IdeasTabContent
+            bookId={bookId}
+            ideas={ideas}
+            myTab={myTab}
+            setMyTab={setMyTab}
+          />
         </div>
       )}
     </div>

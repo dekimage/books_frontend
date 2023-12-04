@@ -17,6 +17,7 @@ import { UserNav } from "./UserNav";
 import { useAuth } from "@/context/auth";
 import { Button } from "./ui/button";
 import Image from "next/image";
+import { baseUrl } from "@/app/utils/url";
 
 const components = [
   {
@@ -35,31 +36,13 @@ const components = [
     href: "/collection/ideas",
     description: "Create and find the key ideas from books.",
   },
-  {
-    title: "Tasks",
-    href: "/collection/tasks",
-    description: "Curate a todo list to apply the wisdom of the books.",
-  },
-  {
-    title: "Routines",
-    href: "/collection/routines",
-    description: "Build daily habits based on the books you read.",
-  },
-  {
-    title: "Questions",
-    href: "/collection/questions",
-    description:
-      "Prompt your thinking and creativity with intriquing questions.",
-  },
 ];
-
-const baseUrl = "http://localhost:1337";
 
 function NavBar() {
   const { isAuthenticated } = useAuth();
 
   return (
-    <NavigationMenu className="border-b w-full max-w-full py-2 px-4 justify-between">
+    <NavigationMenu className="border-b w-full max-w-full justify-between px-1 py-2 sm:px-4">
       <NavigationMenuList>
         <Link href="/">
           <NavigationMenuItem className="cursor-pointer">
@@ -142,7 +125,7 @@ function NavBar() {
       <NavigationMenuList>
         {isAuthenticated ? (
           <>
-            <NavigationMenuItem className="mr-4">
+            <NavigationMenuItem className="mr-4 hidden sm:block">
               <ModeToggle />
             </NavigationMenuItem>
             <NavigationMenuItem>

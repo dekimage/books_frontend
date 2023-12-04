@@ -14,9 +14,13 @@ export const api = {
   deleteIdea: async (id) => {
     await poster(`idea/deleteIdea`, { id }, Method.PUT);
   },
-  favoriteIdea: async (id, bookId) => {
-    await poster(`idea/favoriteIdea`, { id }, Method.PUT);
+  saveIdea: async (id, bookId) => {
+    await poster(`idea/saveIdea`, { id }, Method.PUT);
     mutate(`idea/getBookFavorites?bookId=${bookId}`);
+  },
+  likeIdea: async (id, bookId) => {
+    await poster(`idea/likeIdea`, { id }, Method.PUT);
+    // mutate(`idea/getBookFavorites?bookId=${bookId}`);
   },
   reportIdea: async (id) => {
     await poster(`idea/reportIdea`, { id }, Method.PUT);

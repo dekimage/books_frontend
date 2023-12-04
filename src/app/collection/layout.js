@@ -17,18 +17,6 @@ const sidebarNavItems = [
     title: "Ideas",
     href: "/collection/ideas",
   },
-  {
-    title: "Tasks",
-    href: "/collection/tasks",
-  },
-  {
-    title: "Routines",
-    href: "/collection/routines",
-  },
-  {
-    title: "Questions",
-    href: "/collection/questions",
-  },
 ];
 
 const SettingsLayout = ({ children }) => {
